@@ -67,7 +67,12 @@ jobs:
             fi
             $SUDO mv eksctl_download/eksctl /usr/local/bin/
             rmdir eksctl_download      
-
+      - aws-eks/create-cluster:
+          cluster-name: slatercapstone
+          skip-kubectl-install: false
+          verbose: 3
+          node-type: t2.small
+          
 #tests the cluster built by the orb
   test-cluster:
     executor: aws-eks/python3
