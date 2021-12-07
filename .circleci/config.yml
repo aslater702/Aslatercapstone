@@ -38,6 +38,7 @@ jobs:
             command: |
               . venv/bin/activate
               make lint
+              
 #create cluster and download eksctl 
   create-a-cluster:
     executor: aws-eks/python3
@@ -68,11 +69,25 @@ jobs:
             $SUDO mv eksctl_download/eksctl /usr/local/bin/
             rmdir eksctl_download      
       - aws-eks/create-cluster:
-          cluster-name: slatercapstone
-          skip-kubectl-install: false
+          cluster-name: << parameters.cluster-name >>
+          aws-region: << parameters.region >>
+          zones: "<< parameters.zones >>"
+          ssh-access: true
+          ssh-public-key: "/tmp/keys/eks_id_rsa.pub"
+          asg-access: false
+          external-dns-access: false
+          full-ecr-access: false
+          aws-max-polling-wait-time: "25m"
+          tags: "name=cci_orbs,purpose=orb_test"
           verbose: 3
-          node-type: t2.small
-          
+          no-output-timeout: 50m
+          show-eksctl-command: true
+      - quick-cluster-tests
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - keys
+
 #tests the cluster built by the orb
   test-cluster:
     executor: aws-eks/python3
