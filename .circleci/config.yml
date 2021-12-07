@@ -39,7 +39,7 @@ jobs:
               . venv/bin/activate
               make lint
 #create cluster and download eksctl 
-  create-cluster:
+  create-a-cluster:
     executor: aws-eks/python3
     parameters:
       cluster-name: 
@@ -92,12 +92,12 @@ workflows:
   deployment:
     jobs:
       - build
-      - create-cluster:
+      - create-a-cluster:
           cluster-name: slatercapstone
       - aws-eks/create-cluster:
           cluster-name: slatercapstone
           requires:
-            -  create-cluster
+            -  create-a-cluster
       - test-cluster:
           cluster-name: slatercapstone
           requires:
