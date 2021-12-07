@@ -39,36 +39,35 @@ jobs:
               . venv/bin/activate
               make lint
 
-#create cluster and download eksctl 
-  create-a-cluster:
+#sara's code for create a cluster
+# create kubernetes cluster 
+  create-small-cluster:
     executor: aws-eks/python3
     parameters:
-      cluster-name: 
+      cluster-name:
         description: |
-          slatercapstone
+          The name of the EKS cluster
         type: string
     steps:
       - checkout
-      - aws-eks/update-kubeconfig-with-authenticator:
+      - aws-eks/install-aws-iam-authenticator:
           release-tag: ''
-          cluster-name: << parameters.cluster-name >>
       - run:
-          name: install eksctl tool
+          name: Install the eksctl tool
           command: |
             if which eksctl > /dev/null; then
-              echo "eksctl is already installed"
-              exit 0
+            echo "eksctl is already installed"
+            exit 0
             fi
             mkdir -p eksctl_download
-            curl --silent --location --retry 5 "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" \
-              | tar xz -C eksctl_download
+            curl --silent --location --retry 5 "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C eksctl_download
             chmod +x eksctl_download/eksctl
             SUDO=""
             if [ $(id -u) -ne 0 ] && which sudo > /dev/null ; then
-              SUDO="sudo"
+            SUDO="sudo"
             fi
             $SUDO mv eksctl_download/eksctl /usr/local/bin/
-            rmdir eksctl_download      
+            rmdir eksctl_download
       - aws-eks/create-cluster:
           cluster-name: << parameters.cluster-name >>
           skip-kubectl-install: false
@@ -77,7 +76,6 @@ jobs:
           nodes-max: 2
           ssh-access: false
           ssh-public-key: ''
-
 #tests the cluster built by the orb
   test-cluster:
     executor: aws-eks/python3
@@ -102,12 +100,12 @@ workflows:
   deployment:
     jobs:
       - build
-      - create-a-cluster:
+      - create-small-cluster:
           cluster-name: slatercapstone
       - aws-eks/create-cluster:
           cluster-name: slatercapstone
           requires:
-            -  create-a-cluster
+            -  create-small-cluster
       - test-cluster:
           cluster-name: slatercapstone
           requires:
