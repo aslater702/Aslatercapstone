@@ -38,6 +38,36 @@ jobs:
             command: |
               . venv/bin/activate
               make lint
+#create cluster and download eksctl 
+  create-cluster:
+    executor: aws-eks/python3
+    parameters:
+      cluster-name: 
+        description: |
+          slatercapstone
+        type: string
+    steps:
+      - checkout
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: << parameters.cluster-name >>
+      - run:
+          name: install eksctl
+          command: |
+            if which eksctl > /dev/null; then
+              echo "eksctl is already installed"
+              exit 0
+            fi
+
+            mkdir -p eksctl_download
+            curl --silent --location --retry 5 "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" \
+              | tar xz -C eksctl_download
+            chmod +x eksctl_download/eksctl
+            SUDO=""
+            if [ $(id -u) -ne 0 ] && which sudo > /dev/null ; then
+              SUDO="sudo"
+            fi
+            $SUDO mv eksctl_download/eksctl /usr/local/bin/
+            rmdir eksctl_download      
 
 #tests the cluster built by the orb
   test-cluster:
@@ -51,6 +81,11 @@ jobs:
       - kubernetes/install
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: << parameters.cluster-name >>
+      - run:
+          name: install eksctl
+          command: |
+            if which eksctl > /dev/null: then
+            echo 
       - run:
           command: |
             kubectl get services
