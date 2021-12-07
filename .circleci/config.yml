@@ -49,7 +49,7 @@ jobs:
     steps:
       - checkout
       - aws-eks/update-kubeconfig-with-authenticator:
-          release-tag: ''
+          cluster-name: << parameters.cluster-name >>
       - run:
           name: install eksctl tool
           command: |
