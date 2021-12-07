@@ -1,10 +1,6 @@
-from flask import Flask, jsonify
-from flask_restful import Resource, Api
-import requests
-import json
+from flask import Flask
 
 app = Flask(__name__)
-api = Api(app)
 
 #start of hello world app    
 @app.route('/')
