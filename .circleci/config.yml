@@ -39,6 +39,7 @@ jobs:
               . venv/bin/activate
               make lint
 
+#tests the cluster built by the orb
   test-cluster:
     executor: aws-eks/python3
     parameters:
