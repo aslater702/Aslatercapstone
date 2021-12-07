@@ -69,7 +69,7 @@ jobs:
             $SUDO mv eksctl_download/eksctl /usr/local/bin/
             rmdir eksctl_download      
       - aws-eks/create-cluster:
-                cluster-name: slatercapstone
+                cluster-name: << parameters.cluster-name >>
                 skip-kubectl-install: false
                 verbose: 3
                 node-type: t2.small
