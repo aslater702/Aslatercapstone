@@ -65,7 +65,7 @@ jobs:
           name: push docker image to ECS
           command: |
             # retrieve authentication token
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password ${DOCKER_PASSWORD} 186622365412.dkr.ecr.us-east-1.amazonaws.com
+            aws ecr get-login-password --region us-east-1 | docker login -u AWS -p $(aws ecr get-login-password --region us-east-1) 186622365412.dkr.ecr.us-east-1.amazonaws.com
             # push docker image to aslatercapstone repository in ECR
             docker push 186622365412.dkr.ecr.us-east-1.amazonaws.com/aslatercapstone:latest
   
