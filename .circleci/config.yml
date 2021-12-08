@@ -39,9 +39,8 @@ jobs:
               . venv/bin/activate
               make lint
 
-#sara's code for create a cluster
 # create kubernetes cluster 
-  create-small-cluster:
+  create-a-cluster:
     executor: aws-eks/python3
     parameters:
       cluster-name:
@@ -92,6 +91,25 @@ jobs:
           command: |
             kubectl get services
           name: Test cluster
+
+  run-docker:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: run docker container
+          no_output_timeout: 10m
+          command: |
+            ./run_docker.sh
+  upload-docker:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: upload docker container
+          no_output_timeout: 10m
+          command: |
+            ./upload_docker.sh ${DOCKER_USERNAME} ${DOCKER_PASSWORD}
 orbs:
   aws-eks: circleci/aws-eks@0.2.3
   kubernetes: circleci/kubernetes@0.4.0
@@ -100,16 +118,23 @@ workflows:
   deployment:
     jobs:
       - build
-      - create-small-cluster:
+      - create-a-cluster:
           cluster-name: slatercapstone
       - aws-eks/create-cluster:
           cluster-name: slatercapstone
           requires:
-            -  create-small-cluster
+            -  create-a-cluster
       - test-cluster:
           cluster-name: slatercapstone
           requires:
             - aws-eks/create-cluster
+      - run-docker:
+          requires:
+            - build
+      - upload-docker:
+          requires:
+            - build
+            - run-docker
       #- aws-eks/delete-cluster:
       #    cluster-name: slatercapstone
       #    requires:
