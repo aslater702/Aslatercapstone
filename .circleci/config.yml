@@ -54,10 +54,13 @@ jobs:
             ./upload_docker.sh ${DOCKER_USERNAME} ${DOCKER_PASSWORD}
 
   ecr-push:
-    docker:
-      - image: amazon/aws-cli
+    machine: true
     steps:
       - checkout
+      - run:
+          name: install dependencies
+          command: |
+            pip install awscli
       - run:
           name: push docker image to ECS
           command: |
