@@ -1,0 +1,44 @@
+# This file creates the kubernetes deployment for the docker image
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: audreyhelloworld
+  name: capstonewebsite
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: audreyhelloworld
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: audreyhelloworld
+    spec:
+      containers:
+      - image: public.ecr.aws/b5c5s7l4/adityaprakash2811/nodek8:latest #update this with personal ECR image 
+        name: capstonewebsite
+        imagePullPolicy: Always
+        resources: {}
+        ports:
+          - containerPort: 80 #check this port
+status: {}
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: capstonewebsite
+  labels:
+    run: audreyhelloworld
+spec:
+  ports:
+  - port: 80 #check this port
+    protocol: TCP
+  selector:
+    app: audreyhelloworld
+  type: NodePort

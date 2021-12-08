@@ -65,11 +65,21 @@ jobs:
           name: push docker image to ECS
           command: |
             # retrieve authentication token
-            aws ecr get-login-password --region us-east-1 | docker login --username ${DOCKER_USERNAME} --password ${DOCKER_PASSWORD} 186622365412.dkr.ecr.us-east-1.amazonaws.com
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password ${DOCKER_PASSWORD} 186622365412.dkr.ecr.us-east-1.amazonaws.com
             # push docker image to aslatercapstone repository in ECR
             docker push 186622365412.dkr.ecr.us-east-1.amazonaws.com/aslatercapstone:latest
   
-  # kubernetes-deployment:
+  kubernetes-deployment:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: create kubernetes deployment using docker image
+          command: |
+            kubectl create -f manifest.yml
+            #kubectl get svc
+            #kubectl get deploy
+            #kubectl get pods
 
 workflows:
   deployment:
