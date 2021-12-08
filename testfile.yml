@@ -92,27 +92,20 @@ jobs:
             kubectl get services
           name: Test cluster
 
-  run-docker:
+  run-upload-docker:
     machine: true
     steps:
       - checkout
       - run:
-          name: run docker container
+          name: run and upload the docker container to docker hub repository
           no_output_timeout: 10m
           command: |
             ./run_docker.sh
-  upload-docker:
-    machine: true
-    steps:
-      - checkout
       - run:
           name: upload docker container
           no_output_timeout: 10m
           command: |
             ./upload_docker.sh ${DOCKER_USERNAME} ${DOCKER_PASSWORD}
-orbs:
-  aws-eks: circleci/aws-eks@0.2.3
-  kubernetes: circleci/kubernetes@0.4.0
 
 workflows:
   deployment:

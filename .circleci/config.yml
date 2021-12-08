@@ -37,22 +37,16 @@ jobs:
               . venv/bin/activate
               make lint
 
-# This job creates the docker image
-  run-docker:
+# This job creates the docker image and uploads it to docker hub
+  run-upload-docker:
     machine: true
     steps:
       - checkout
       - run:
-          name: run docker container
+          name: run docker container to create docker image
           no_output_timeout: 10m
           command: |
             ./run_docker.sh
-
-# This job uploads the docker image to the docker hub
-  upload-docker:
-    machine: true
-    steps:
-      - checkout
       - run:
           name: upload docker container
           no_output_timeout: 10m
@@ -78,17 +72,12 @@ workflows:
   deployment:
     jobs:
       - build
-      - run-docker:
+      - run-upload-docker:
           requires:
             - build
-      - upload-docker:
-          requires:
-            - build
-            - run-docker
       - ecr-push:
           requires:
-            - run-docker
-            - upload-docker
+            - run-upload-docker
       #- kubernetes-deployment:
       #    requires:
       #      - ecr-push
