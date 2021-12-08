@@ -13,4 +13,4 @@ docker image ls
 # Step 3: 
 # Run flask app
 # add -d  before -p for circleci
-docker run -p 8000:80 aslatercap
+docker run -d -p 8000:80 aslatercap
