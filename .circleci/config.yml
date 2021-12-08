@@ -57,7 +57,7 @@ jobs:
           name: upload docker container
           no_output_timeout: 10m
           command: |
-            ./upload_docker.sh ${DOCKER_USERNAME} ${DOCKER_PASSWORD}
+            chmod +x ./upload_docker.sh ${DOCKER_USERNAME} ${DOCKER_PASSWORD}
 
   ecr-push:
     docker:
