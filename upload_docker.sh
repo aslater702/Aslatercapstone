@@ -9,7 +9,7 @@ dockerpath=aslater702/aslatercap
  
 # Authenticate & tag
 echo "Docker ID and Image: $dockerpath"
-docker login --username aslater702
+docker login --username aslater702 --password ${DOCKER_PASSWORD}
 docker tag aslatercap $dockerpath
 
 # Push image to a docker repository
