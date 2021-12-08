@@ -1,11 +1,12 @@
-from flask import Flask
+#!/usr/bin/python
+# Audrey Slater hello world 
 
+from flask import Flask, render_template
 app = Flask(__name__)
-
-#start of hello world app    
+   
 @app.route('/')
-def hello_world():
-    return 'Hello world, my name is Audrey Slater!'
+def website_page():
+    return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8080)
+    app.run(debug=True, host='0.0.0.0', port=80)
