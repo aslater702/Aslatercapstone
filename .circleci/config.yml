@@ -61,8 +61,7 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            linux-install-aws
-            linux-install-kubectl
+            pip install awscli
       - run:
           name: push docker image to ECS
           command: |
