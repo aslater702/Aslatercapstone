@@ -4,6 +4,7 @@
 
 # Step 1:
 # Builds docker image and tags with project tag
+# echo this is an update $UPDATE
 docker build --tag=aslatercap .
 
 # Step 2: 
