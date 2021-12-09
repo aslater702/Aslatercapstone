@@ -68,6 +68,7 @@ jobs:
       - run:
           name: create kubernetes deployment using docker image
           command: |
+            aws eks --region us-east-1 update-kubeconfig --name slatercapstone
             kubectl apply -f manifest.yml
 
 
