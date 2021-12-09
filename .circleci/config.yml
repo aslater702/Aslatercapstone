@@ -55,9 +55,12 @@ jobs:
             ./upload_docker.sh ${DOCKER_USERNAME} ${DOCKER_PASSWORD}
   
   kubernetes-deployment:
-    machine: true
+    machine:
+      image: ubuntu-2004:202111-01
     steps:
       - checkout
+      - linux-install-aws
+      - linux-install-kubectl
       - run:
           name: create kubernetes deployment using docker image
           command: |
