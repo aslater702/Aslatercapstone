@@ -147,3 +147,27 @@ ecr-push:
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 186622365412.dkr.ecr.us-east-1.amazonaws.com
             # push docker image to aslatercapstone repository in ECR
             docker push 186622365412.dkr.ecr.us-east-1.amazonaws.com/aslatercapstone:latest
+
+
+arn:aws:iam::186622365412:user/AdminAES
+
+apiVersion: v1
+data:
+  mapUsers: |
+    - userarn: arn:aws:iam::186622365412:user/AdminAES
+      username: AdminAES
+      groups: 
+        - system:masters
+  mapRoles: |
+    - groups:
+      - system:bootstrappers
+      - system:nodes
+      rolearn: arn:aws:iam::186622365412:role/eksctl-slatercapstone-nodegroup-c-NodeInstanceRole-1NWG0138E77CJ
+      username: system:node:{{EC2PrivateDNSName}}
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2021-12-08T19:26:32Z"
+  name: aws-auth
+  namespace: kube-system
+  resourceVersion: "1297"
+  uid: 0e909a7c-502e-4506-b8e8-81eb5cb68a72
