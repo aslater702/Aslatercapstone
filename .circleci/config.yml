@@ -39,7 +39,8 @@ jobs:
 
 # This job creates the docker image and uploads it to docker hub
   run-upload-docker:
-    machine: true
+    machine:
+      image: ubuntu-2004:202111-01
     steps:
       - checkout
       - run:
