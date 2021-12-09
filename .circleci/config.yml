@@ -62,9 +62,7 @@ jobs:
           name: create kubernetes deployment using docker image
           command: |
             kubectl apply -f manifest.yml
-            #kubectl get svc
-            #kubectl get deploy
-            #kubectl get pods
+
 
 workflows:
   deployment:
