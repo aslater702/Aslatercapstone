@@ -54,18 +54,20 @@ jobs:
             ./upload_docker.sh ${DOCKER_USERNAME} ${DOCKER_PASSWORD}
 
   ecr-push:
-    machine: true
+    machine:
+      image: ubuntu-2004:202111-01
     steps:
       - checkout
       - run:
           name: install dependencies
           command: |
-            pip install awscli
+            linux-install-aws
+            linux-install-kubectl
       - run:
           name: push docker image to ECS
           command: |
             # retrieve authentication token
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password ${DOCKER_PASSWORD} 186622365412.dkr.ecr.us-east-1.amazonaws.com
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 186622365412.dkr.ecr.us-east-1.amazonaws.com
             # push docker image to aslatercapstone repository in ECR
             docker push 186622365412.dkr.ecr.us-east-1.amazonaws.com/aslatercapstone:latest
   
