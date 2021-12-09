@@ -1,4 +1,4 @@
-# This file creates the kubernetes deployment for the docker image
+# This file deploys the docker image to kubernetes
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -11,7 +11,6 @@ spec:
   selector:
     matchLabels:
       app: audreyhelloworld
-  strategy: {}
   template:
     metadata:
       creationTimestamp: null
@@ -19,12 +18,11 @@ spec:
         app: audreyhelloworld
     spec:
       containers:
-      - image: public.ecr.aws/b5c5s7l4/adityaprakash2811/nodek8:latest #update this with personal ECR image 
+      - image: aslater702/aslatercap 
         name: audreyhelloworld
         imagePullPolicy: Always
-        resources: {}
         ports:
-          - containerPort: 80 #container is created on port 80
+          - containerPort: 80
 status: {}
 
 ---
@@ -37,7 +35,7 @@ metadata:
     run: audreyhelloworld
 spec:
   ports:
-  - port: 80 #check this port
+  - port: 80
     protocol: TCP
   selector:
     app: audreyhelloworld

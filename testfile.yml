@@ -121,14 +121,29 @@ workflows:
           cluster-name: slatercapstone
           requires:
             - aws-eks/create-cluster
-      - run-docker:
+      - run-upload-docker:
           requires:
             - build
-      - upload-docker:
-          requires:
-            - build
-            - run-docker
       #- aws-eks/delete-cluster:
       #    cluster-name: slatercapstone
       #    requires:
       #      - test-cluster
+
+
+# ECR Repo 
+ecr-push:
+    machine:
+      image: ubuntu-2004:202111-01
+    steps:
+      - checkout
+      - run:
+          name: install dependencies
+          command: |
+            pip install awscli
+      - run:
+          name: push docker image to ECS
+          command: |
+            # retrieve authentication token
+            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 186622365412.dkr.ecr.us-east-1.amazonaws.com
+            # push docker image to aslatercapstone repository in ECR
+            docker push 186622365412.dkr.ecr.us-east-1.amazonaws.com/aslatercapstone:latest
