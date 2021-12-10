@@ -15,4 +15,4 @@ docker tag aslatercap aslatercap:latest
 
 # Push image to a docker repository
 docker push $dockerpath
-docker push aslatercap:latest
+#docker push aslatercap:latest
