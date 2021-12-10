@@ -2,7 +2,7 @@ FROM python:3.7.3-stretch
 
 # Create a working directory
 WORKDIR /app
-CMD [pip, messup]
+
 # Copy source code to working directory
 COPY . /app/
 

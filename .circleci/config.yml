@@ -44,15 +44,20 @@ jobs:
     steps:
       - checkout
       - run:
+          name: index UPDATE variable using bashrc file
+          command: |  
+            ./update.sh
+      - run:
           name: run docker container to create docker image
           no_output_timeout: 10m
           command: |
-            ./run_docker.sh
+            echo "Update = ${UPDATE}"
+            ./run_docker.sh ${UPDATE}
       - run:
           name: upload docker container
           no_output_timeout: 10m
           command: |
-            ./upload_docker.sh ${DOCKER_USERNAME} ${DOCKER_PASSWORD}
+            ./upload_docker.sh ${DOCKER_USERNAME} ${DOCKER_PASSWORD} ${UPDATE}
   
   kubernetes-deployment:
     machine:
@@ -67,10 +72,10 @@ jobs:
             sudo chmod +x /usr/local/bin/kubectl
       - run:
           name: create kubernetes deployment using docker image
-          command: |
+          command: | 
             aws eks --region us-east-1 update-kubeconfig --name slatercapstone
             kubectl apply -f manifest.yml
-
+            
 
 workflows:
   deployment:

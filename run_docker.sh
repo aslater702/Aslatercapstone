@@ -4,8 +4,7 @@
 
 # Step 1:
 # Builds docker image and tags with project tag
-# echo this is an update $UPDATE
-docker build --tag=aslatercap .
+docker build --tag=aslatercap:${UPDATE} .
 
 # Step 2: 
 # List docker images
@@ -14,4 +13,4 @@ docker image ls
 # Step 3: 
 # Run flask app
 # add -d  before -p for circleci
-docker run -d -p 8000:80 aslatercap
+docker run -d -p 8000:80 aslatercap:${UPDATE}
