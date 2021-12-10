@@ -10,7 +10,9 @@ dockerpath=aslater702/aslatercap:${UPDATE}
 echo "Docker ID and Image: $dockerpath"
 docker login --username aslater702 --password ${DOCKER_PASSWORD}
 docker tag aslatercap $dockerpath
+docker tag aslatercap aslatercap:latest
 
 
 # Push image to a docker repository
 docker push $dockerpath
+docker push aslatercap:latest

@@ -4,7 +4,8 @@
 
 # Step 1:
 # Builds docker image and tags with project tag
-docker build --tag=aslatercap:${UPDATE} .
+# docker build --tag=aslatercap:${UPDATE} .
+docker build --tag=aslatercap:${UPDATE} --tag=aslatercap:latest .
 
 # Step 2: 
 # List docker images
